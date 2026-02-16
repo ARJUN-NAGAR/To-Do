@@ -1,4 +1,8 @@
 package com.example.todoapp.DTO;
 
-public record todoResponseDTO() {
-}
+public record todoResponseDTO(
+        String id,
+        String title,
+        String description,
+        boolean completed
+) {}

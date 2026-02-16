@@ -20,7 +20,6 @@ public class todoController {
 
     @PostMapping("/add")
     public todoResponseDTO addTodo(@Valid @RequestBody todoRequestDTO todo) {
-        // We are passing a dummy email or null since we removed Auth logic
         return service.addTodo(todo, "guest@example.com");
     }
 
@@ -36,7 +35,9 @@ public class todoController {
     }
 
     @PutMapping("/update/{id}")
-    public todoResponseDTO updateTodo(@PathVariable String id, @Valid @RequestBody todoRequestDTO todo) {
+    public todoResponseDTO updateTodo(
+            @PathVariable String id,
+            @Valid @RequestBody todoRequestDTO todo) {
         return service.updateTodo(id, todo);
     }
 }

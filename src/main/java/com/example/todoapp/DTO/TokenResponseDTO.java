@@ -1,4 +1,4 @@
 package com.example.todoapp.DTO;
 
-public record TokenResponseDTO() {
+public record TokenResponseDTO(String token) {
 }

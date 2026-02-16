@@ -25,31 +25,49 @@ public class todoService {
         todo.setDescription(dto.getDescription());
         todo.setUserId(email);
 
+        // If 'completed' is missing in JSON, default to false
+        todo.setCompleted(dto.getCompleted() != null ? dto.getCompleted() : false);
+
         todoModel saved = todoRepo.save(todo);
-        return new todoResponseDTO(saved.getId(), saved.getTitle(), saved.getDescription(), saved.isCompleted());
+        return mapToResponseDTO(saved);
     }
 
     public List<todoResponseDTO> getAllTodos(String email) {
         return todoRepo.findAll().stream()
-                .map(t -> new todoResponseDTO(t.getId(), t.getTitle(), t.getDescription(), t.isCompleted()))
+                .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public void deleteTodo(String id) {
         if (!todoRepo.existsById(id)) {
-            throw new todoNotFoundException("Todo with ID " + id + " not found");
+            throw new todoNotFoundException("Todo not found with ID: " + id);
         }
         todoRepo.deleteById(id);
     }
 
     public todoResponseDTO updateTodo(String id, todoRequestDTO dto) {
         todoModel todo = todoRepo.findById(id)
-                .orElseThrow(() -> new todoNotFoundException("Todo not found"));
+                .orElseThrow(() -> new todoNotFoundException("Todo not found with ID: " + id));
 
         todo.setTitle(dto.getTitle());
         todo.setDescription(dto.getDescription());
 
+        // Update status if provided, otherwise keep existing
+        if (dto.getCompleted() != null) {
+            todo.setCompleted(dto.getCompleted());
+        }
+
         todoModel updated = todoRepo.save(todo);
-        return new todoResponseDTO(updated.getId(), updated.getTitle(), updated.getDescription(), updated.isCompleted());
+        return mapToResponseDTO(updated);
+    }
+
+    // Helper to keep code clean
+    private todoResponseDTO mapToResponseDTO(todoModel model) {
+        return new todoResponseDTO(
+                model.getId(),
+                model.getTitle(),
+                model.getDescription(),
+                model.isCompleted()
+        );
     }
 }

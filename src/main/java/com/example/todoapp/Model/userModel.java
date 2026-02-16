@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class userModel {
 
     @Id
-    private String id; // MongoDB uses String IDs by default
+    private String id;
 
     @Indexed(unique = true)
     private String username;
