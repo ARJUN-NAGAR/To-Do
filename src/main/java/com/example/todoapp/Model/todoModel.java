@@ -15,15 +15,10 @@ public class todoModel {
 
     @Id
     private String id;
-
-    private String userId; // Reference to the userModel ID
-
+    private String userId;
     private String title;
-
     private String description;
-
     private boolean completed = false;
-
     private LocalDateTime createdAt = LocalDateTime.now();
 
 }
